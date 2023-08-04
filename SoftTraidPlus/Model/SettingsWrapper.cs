@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using SoftTradePlus.Model.Data;
 
 namespace SoftTradePlus.Model
 {

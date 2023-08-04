@@ -1,6 +1,4 @@
-﻿using System.Windows.Documents;
-
-namespace SoftTradePlus.Model
+﻿namespace SoftTradePlus.Model.Data
 {
     public enum ClientStatus
     {

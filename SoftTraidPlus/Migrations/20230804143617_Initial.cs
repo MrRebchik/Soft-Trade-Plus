@@ -46,7 +46,7 @@ namespace SoftTradePlus.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<int>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<float>(type: "float(18,2)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

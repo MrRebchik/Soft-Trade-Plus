@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace SoftTradePlus.Model
+namespace SoftTradePlus.Model.Data
 {
     public class ApplicationContext : DbContext
     {

@@ -1,4 +1,4 @@
-﻿using SoftTradePlus.Model;
+﻿using SoftTradePlus.Model.Data;
 
 namespace SoftTradePlus.ViewModel
 {

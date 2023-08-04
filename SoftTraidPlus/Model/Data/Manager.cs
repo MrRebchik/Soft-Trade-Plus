@@ -1,4 +1,4 @@
-﻿namespace SoftTradePlus.Model
+﻿namespace SoftTradePlus.Model.Data
 {
     public class Manager
     {
