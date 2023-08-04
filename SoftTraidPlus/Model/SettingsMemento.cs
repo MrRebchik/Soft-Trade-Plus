@@ -2,12 +2,13 @@
 
 namespace SoftTradePlus.Model
 {
+    [DataContract]
     public class SettingsMemento
     {
         [DataMember (Name = "isAuthorized")]
-        public bool IsAuthorized { get; private set; }
+        public bool IsAuthorized { get; set; }
         [DataMember(Name = "currentUser")]
-        public Manager CurrentUser {  get; private set; }
+        public Manager? CurrentUser {  get; set; }
         public SettingsMemento()
         {
             IsAuthorized = false;

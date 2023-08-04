@@ -6,7 +6,34 @@
         xmlns:local="clr-namespace:SoftTradePlus.View.RegistrationWindow"
         mc:Ignorable="d"
         Title="RegistrationWindow" Height="450" Width="800">
-    <Grid>
+    <Grid x:Name="Grid1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50 px"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20 px"/>
+            <RowDefinition Height="100 px"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock 
+            Grid.Column="0" Grid.Row="0" 
+            HorizontalAlignment="Left" VerticalAlignment="Center" 
+            Margin="30,0,0,0" >
+            Выбор менеджера
+        </TextBlock>
+        <CheckBox 
+            Grid.Column="1" Grid.Row="2"
+            x:Name="checkBox1" IsThreeState="False" IsChecked="False" Height="20" Content="Запомнить выбор" 
+            Padding="0 0 20 0" HorizontalAlignment="Right"/>
+        <Button Grid.Column="0" Grid.Row="3" Content="Добавить"  />
+        <Button Grid.Column="1" Grid.Row="3" Content="Войти"  />
+        <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+            <Button Background="Blue" Content="Менеджер Коля" />
+            <Button Background="White" Content="Менеджер Жора" />
+            <Button Background="Red" Content="Менеджер Вася" />
+        </StackPanel>
         
     </Grid>
 </Window>
