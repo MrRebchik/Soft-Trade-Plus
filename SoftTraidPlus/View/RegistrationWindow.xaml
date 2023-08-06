@@ -5,35 +5,62 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoftTradePlus.View.RegistrationWindow"
         mc:Ignorable="d"
-        Title="RegistrationWindow" Height="450" Width="800">
+        Title="RegistrationWindow" Height="450" Width="800"
+        Name="MainWnd">
     <Grid x:Name="Grid1">
         <Grid.RowDefinitions>
             <RowDefinition Height="50 px"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20 px"/>
-            <RowDefinition Height="100 px"/>
+            <RowDefinition Height="50 px"/>
+            <RowDefinition Height="50 px"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.75*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <TextBlock 
             Grid.Column="0" Grid.Row="0" 
-            HorizontalAlignment="Left" VerticalAlignment="Center" 
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            FontSize="18"
             Margin="30,0,0,0" >
             Выбор менеджера
         </TextBlock>
         <CheckBox 
-            Grid.Column="1" Grid.Row="2"
+            Grid.Column="2" Grid.Row="2"
             x:Name="checkBox1" IsThreeState="False" IsChecked="False" Height="20" Content="Запомнить выбор" 
-            Padding="0 0 20 0" HorizontalAlignment="Right"/>
-        <Button Grid.Column="0" Grid.Row="3" Content="Добавить"  />
-        <Button Grid.Column="1" Grid.Row="3" Content="Войти"  />
-        <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-            <Button Background="Blue" Content="Менеджер Коля" />
-            <Button Background="White" Content="Менеджер Жора" />
-            <Button Background="Red" Content="Менеджер Вася" />
-        </StackPanel>
-        
+            HorizontalAlignment="Center"/>
+        <ListView 
+            x:Name="ViewAllManagers"
+            ItemsSource="{Binding AllManagers }"
+            Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"
+            SelectedItem = "{Binding SelectedManager}"
+            FontSize="18"
+            Padding="40 0 40 0">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="IsSelected" Value="{Binding SelectedManager}"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View >
+                <GridView>
+                    <GridViewColumn Header="Имя" 
+                                    DisplayMemberBinding="{Binding Path=Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button 
+            Command="{Binding OpenEditManager}"
+            Grid.Column="1" Grid.Row="3" Content="Редактировать" Height="40" Width="200" />
+        <Button 
+            Command="{Binding DeleteManager}"
+            Grid.Column="1" Grid.Row="4" Content="Удалить" Height="40" Width="200" />
+        <Button 
+            Command="{Binding OpenAddNewManagerWindow}"
+            Grid.Column="0" Grid.Row="3" Grid.RowSpan="2" Content="Добавить"  Height="90" Width="200"/>
+        <Button 
+            Command="{Binding OpenMainWindow}" CommandParameter="{Binding ElementName=MainWnd}"
+            Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Content="Войти" Height="90" Width="200" />
     </Grid>
 </Window>

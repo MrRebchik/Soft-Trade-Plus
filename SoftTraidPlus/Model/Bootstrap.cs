@@ -18,13 +18,13 @@ namespace SoftTradePlus.Model
 
             if (!_settingsWrapper.IsAuthorized)
             {
-                _window = new RegistrationWindow(new RegistrationWindowViewModel());
+                _window = new RegistrationWindow();
 
                 _window.Show();
             }
             else
             {
-                var _mainWindowViewModel = new MainWindowViewModel(_settingsWrapper.CurrentUser);
+                var _mainWindowViewModel = new MainWindowViewModel(_settingsWrapper.CurrentUser); //!!
 
                 _window = new MainWindow(_mainWindowViewModel);
             }

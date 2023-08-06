@@ -10,10 +10,13 @@ namespace SoftTradePlus
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            
+
+            this.ShutdownMode = ShutdownMode.OnLastWindowClose;
+
             _bootstrap = new Bootstrap();
 
             _bootstrap.Run();
+
         }
     }
 }
