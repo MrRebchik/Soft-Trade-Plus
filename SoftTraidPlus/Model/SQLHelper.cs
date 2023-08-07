@@ -1,4 +1,5 @@
-﻿using SoftTradePlus.Model.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SoftTradePlus.Model.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,7 +76,7 @@ namespace SoftTradePlus.Model
                 { 
                     ClientId = client.Id, 
                     ProductId = product.Id, 
-                    IsUnlimited = (product.Type == ProductType.Unlimited) 
+                    IsUnlimited = (product.Type == (int)ProductType.Unlimited) 
                 };
                 if (product.Type == ProductType.Limited)
                 {

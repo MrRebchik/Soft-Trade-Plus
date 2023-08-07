@@ -5,8 +5,145 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoftTradePlus"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Name="WorkWnd">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="1"
+                Height="35"
+                Width="120"
+                HorizontalAlignment="Right"
+                Margin="0 0 2 0"
+                Panel.ZIndex="2"
+                >
+            <TextBlock TextAlignment ="Center">
+                Сменить <LineBreak/>
+                пользователя
+            </TextBlock>
+        </Button>
+        
+        <TextBlock Grid.Column="1"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Text="{Binding ManagerName}"
+                   Margin="0 0 130 0"/>
+        <TabControl Grid.ColumnSpan="2" Grid.RowSpan="2" 
+                    Margin="0 15 0 0">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock> Клиенты</TextBlock>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <ListView 
+                    x:Name="ViewAllClients"
+                    ItemsSource="{Binding AllClients }"
+                    SelectedItem = "{Binding SelectedClient}"
+                    FontSize="16"
+                    Padding="10 0 10 0">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="IsSelected" Value="{Binding SelectedClient}"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View >
+                            <GridView>
+                                <GridViewColumn Header="Имя" 
+                                    DisplayMemberBinding="{Binding Path=Name}"/>
+                                <GridViewColumn Header="Статус" 
+                                    DisplayMemberBinding="{Binding Path=StatusName}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button Grid.Row="1"
+                            Width="200"
+                            Height="35"
+                            HorizontalAlignment="Left"
+                            Margin="5 0 0 0"
+                            Content="Открыть продукты клиента"/>
+                    <Button Grid.Row="1"
+                            Width="150"
+                            Height="35"
+                            HorizontalAlignment="Left"
+                            Margin="210 0 0 0"
+                            Content="Редактировать"/>
+                    <Button Grid.Row="1"
+                            Width="150"
+                            Height="35"
+                            HorizontalAlignment="Left"
+                            Margin="365 0 0 0"
+                            Content="Удалить"/>
+                    <Button Grid.Column="0" Grid.Row="1"
+                            Width="150"
+                            Height="35"
+                            HorizontalAlignment="Right"
+                            Margin="365 0 5 0 "
+                            Content="Добавить"
+                            Command="{Binding OpenAddNewClientWindow}"/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    Продукты
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <ListView 
+                        x:Name="ViewAllProducts"
+                        ItemsSource="{Binding AllProducts }"
+                        SelectedItem = "{Binding SelectedProduct}"
+                        FontSize="16"
+                        Padding="10 0 10 0">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="IsSelected" Value="{Binding SelectedProduct}"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View >
+                            <GridView>
+                                <GridViewColumn Header="Имя" 
+                                    DisplayMemberBinding="{Binding Path=Name}"/>
+                                <GridViewColumn Header="Цена" 
+                                    DisplayMemberBinding="{Binding Path=Price}"/>
+                                <GridViewColumn Header="Тип подписки" 
+                                    DisplayMemberBinding="{Binding Path=TypeName}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button Grid.Row="1"
+                            Width="150"
+                            Height="35"
+                            HorizontalAlignment="Left"
+                            Margin="5 0 0 0"
+                            Content="Редактировать"/>
+                    <Button Grid.Row="1"
+                            Width="150"
+                            Height="35"
+                            HorizontalAlignment="Left"
+                            Margin="160 0 0 0"
+                            Content="Удалить"/>
+                    <Button Grid.Column="0" Grid.Row="1"
+                            Width="150"
+                            Height="35"
+                            HorizontalAlignment="Right"
+                            Margin="365 0 5 0 "
+                            Content="Добавить"
+                            Command="{Binding OpenAddNewProductWindow}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

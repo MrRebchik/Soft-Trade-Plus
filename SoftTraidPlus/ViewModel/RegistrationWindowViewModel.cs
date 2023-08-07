@@ -4,7 +4,6 @@ using SoftTradePlus.Model.Data;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using System;
 using SoftTradePlus.View.RegistrationWindow;
 

@@ -1,0 +1,67 @@
+﻿<Window x:Class="SoftTradePlus.View.AddNewClientWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SoftTradePlus.View"
+        mc:Ignorable="d"
+        Title="AddNewClientWindow" Height="450" Width="800"
+        Name="AddNewClientWnd">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1" TextAlignment="Center" FontSize="30">
+            Добавление новго Клиента
+        </TextBlock>
+        <TextBlock Grid.Row="2" 
+                   TextAlignment="Left" 
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   FontSize="20"
+                   Margin="200 0 0 0"
+                   Width="200">
+            Имя клиента
+        </TextBlock>
+
+        <TextBox Grid.Row="3"
+                 Margin="200 10 200 10"
+                 Text="{Binding ClientName}"/>
+
+        <TextBlock Grid.Row="4" 
+                   TextAlignment="Left" 
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   FontSize="20"
+                   Margin="200 0 0 0"
+                   Width="250">
+            Статус клиента
+        </TextBlock>
+        <ComboBox Grid.Row="5"
+                  ItemsSource="{Binding AllClientStatuses}"
+                  DisplayMemberPath="Name"
+                  SelectedItem="{Binding ClientStatus}"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Center"
+                  FontSize="20"
+                  Margin="200 0 0 0"
+                  Width="250"/>
+        <Button Grid.Row="7"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Height="40"
+                Width="350"
+                Content="Добавить"
+                FontSize="24"
+                Command="{Binding AddNewClient}"
+                CommandParameter="{Binding ElementName= AddNewClientWnd}"/>
+    </Grid>
+</Window>
