@@ -3,12 +3,12 @@ using System.Windows;
 
 namespace SoftTradePlus.View
 {
-    public partial class AddNewManagerWindow : Window
+    public partial class EditClientWindow : Window
     {
-        public AddNewManagerWindow()
+        public EditClientWindow(IMainWindowViewModel vm)
         {
             InitializeComponent();
-            DataContext = new RegistrationWindowViewModel();
+            DataContext = vm;
         }
     }
 }

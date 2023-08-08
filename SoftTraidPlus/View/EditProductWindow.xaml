@@ -5,8 +5,84 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoftTradePlus.View"
         mc:Ignorable="d"
-        Title="EditProductWindow" Height="450" Width="800">
+        Title="EditProductWindow" Height="450" Width="800"
+        Name="EditProdWnd">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="28">
+            Редактировать продукт
+        </TextBlock>
+        <TextBlock Grid.Row="2" 
+                   TextAlignment="Left" 
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   FontSize="20"
+                   Margin="200 0 0 0"
+                   Width="200">
+            Название продукта
+        </TextBlock>
+
+        <TextBox Grid.Row="3"
+                 Margin="200 10 200 10"
+                 Text="{Binding SelectedProductName}"/>
+
+        <TextBlock Grid.Row="4" 
+                   TextAlignment="Left" 
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   FontSize="20"
+                   Margin="200 0 0 0"
+                   Width="200">
+            Цена продукта
+        </TextBlock>
+
+        <TextBox Grid.Row="5"
+                 Margin="200 10 200 10"
+                 Text="{Binding SelectedProductPrice}"/>
+
+        <TextBlock Grid.Row="6" 
+                   TextAlignment="Left" 
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   FontSize="20"
+                   Margin="200 0 0 0"
+                   Width="250">
+            Тип подписки на продукт
+        </TextBlock>
+        <ComboBox x:Name="typesComboBox"
+                  Grid.Row="7"
+                  ItemsSource="{Binding AllProductTypes}"
+                  DisplayMemberPath="Name"
+                  SelectedItem="{Binding SelectedProductType}"
+                  SelectedValue="{Binding SelectedProductType}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  FontSize="20"
+                  Width="350">
+        </ComboBox>
+        <Button Grid.Row="9"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Height="40"
+                Width="350"
+                Content="Сохранить изменения"
+                FontSize="22"
+                Command="{Binding EditProduct}"
+                CommandParameter="{Binding ElementName= EditProdWnd}"/>
     </Grid>
 </Window>

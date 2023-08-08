@@ -42,13 +42,15 @@ namespace SoftTradePlus.Model
                 _memento.CurrentUser = value;
             }
         }
-
+        public void Save()
+        {
+            var serializedMemento = JsonConvert.SerializeObject(_memento);
+            File.WriteAllText(_settingsFilePath, serializedMemento);
+        }
         public void Dispose()
         {
             EnsureInitialized();
-
-            var serializedMemento = JsonConvert.SerializeObject(_memento);
-            File.WriteAllText(_settingsFilePath,serializedMemento);
+            Save();
         }
 
         public void Initialize()

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SoftTradePlus.Model.Data;
+﻿using SoftTradePlus.Model.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,24 +77,32 @@ namespace SoftTradePlus.Model
                     ProductId = product.Id, 
                     IsUnlimited = (product.Type == (int)ProductType.Unlimited) 
                 };
-                if (product.Type == ProductType.Limited)
-                {
-                    newTransaction.PurchaseDate = DateTime.Today;
-                    switch (duration)
-                    {
-                        case Duration.Month:
-                            newTransaction.ExpiryDate = DateTime.Today.AddMonths(1);
-                            return;
-                        case Duration.Quarter:
-                            newTransaction.ExpiryDate = DateTime.Today.AddMonths(3);
-                            return;
-                        case Duration.Year:
-                            newTransaction.ExpiryDate = DateTime.Today.AddYears(1);
-                            return;
-                    }
-                }
+                newTransaction.PurchaseDate = DateTime.Today;
+                AddDuration(newTransaction, product, duration);
                 db.Transactions.Add(newTransaction);
                 db.SaveChanges();
+            }
+        }
+        private static void AddDuration(Transaction transaction, Product product, Duration duration)
+        {
+            if (product.Type == ProductType.Limited)
+            {
+                switch (duration)
+                {
+                    case Duration.Month:
+                        transaction.ExpiryDate = DateTime.Today.AddMonths(1);
+                        return;
+                    case Duration.Quarter:
+                        transaction.ExpiryDate = DateTime.Today.AddMonths(3);
+                        return;
+                    case Duration.Year:
+                        transaction.ExpiryDate = DateTime.Today.AddYears(1);
+                        return;
+                }
+            }
+            else
+            {
+                transaction.ExpiryDate = DateTime.MaxValue;
             }
         }
         public static void DeleteManager(Manager manager)

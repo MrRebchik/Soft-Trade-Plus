@@ -27,6 +27,8 @@ namespace SoftTradePlus.Model
                 var _mainWindowViewModel = new MainWindowViewModel(_settingsWrapper.CurrentUser); //!!
 
                 _window = new MainWindow(_mainWindowViewModel);
+
+                _window.Show();
             }
 
             return _window;

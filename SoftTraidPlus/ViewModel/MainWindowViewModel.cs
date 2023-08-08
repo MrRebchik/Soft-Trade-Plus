@@ -18,21 +18,25 @@ namespace SoftTradePlus.ViewModel
 
         #region Properties
         private Manager _currentManager;
-        public Manager CurrentManager { get; set; }
-        
-        public string ManagerName 
-        { 
+        public Manager CurrentManager
+        {
+            get { return _currentManager; }
+            set { _currentManager = value; }
+        }
+
+        public string ManagerName
+        {
             get
             {
                 return "Текущий пользователь: " + _currentManager.Name;
-            } 
+            }
         }
 
         private List<Client> _allClients = SQLHelper.GetAllClients();
         public List<Client> AllClients
         {
             get { return _allClients.Where(item => item.ManagerId == _currentManager.Id).ToList(); }
-            set 
+            set
             {
                 _allClients = value;
                 NotifyPropertyChanged(nameof(AllClients));
@@ -49,7 +53,7 @@ namespace SoftTradePlus.ViewModel
                 NotifyPropertyChanged(nameof(AllProducts));
             }
         }
-        
+
         private List<Transaction> _allTransactions = SQLHelper.GetAllTransactions();
         public List<Transaction> AllTransactions
         {
@@ -106,7 +110,7 @@ namespace SoftTradePlus.ViewModel
             new ProductTypeClass("Лицензия",0),
             new ProductTypeClass("Временная подписка",1)
         };
-        public List<ProductTypeClass> AllProductTypes 
+        public List<ProductTypeClass> AllProductTypes
         {
             get
             {
@@ -118,6 +122,32 @@ namespace SoftTradePlus.ViewModel
             }
         }
         public ProductTypeClass ProductType { get; set; }
+        //
+        public string SelectedProductName
+        {
+            get { return CurrentProduct.Name; }
+            set { CurrentProduct.Name = value; }
+        }
+        public float SelectedProductPrice
+        {
+            get { return (float)CurrentProduct.Price; }
+            set { CurrentProduct.Price = value; }
+        }
+        public ProductTypeClass SelectedProductType
+        {
+            get
+            {
+                if (CurrentProduct.Type == Model.Data.ProductType.Limited)
+                {
+                    return _allProductTypes[1];
+                }
+                else return _allProductTypes[0];
+            }
+            set
+            {
+                CurrentProduct.Type = (ProductType)value.Number;
+            }
+        }
 
 
         // свойства для клиентов
@@ -132,7 +162,11 @@ namespace SoftTradePlus.ViewModel
             public string Name { get; set; }
             public int Number { get; set; }
         }
-        public string ClientName { get; set; }
+        public string ClientName
+        {
+            get { return CurrentClient.Name; }
+            set { CurrentClient.Name = value; }
+        }
 
         private List<ClientStatusClass> _allClientStatuses = new List<ClientStatusClass>()
         {
@@ -150,7 +184,76 @@ namespace SoftTradePlus.ViewModel
                 _allClientStatuses = value;
             }
         }
-        public ClientStatusClass ClientStatus { get; set; }
+        public ClientStatusClass ClientStatus
+        {
+            get
+            {
+                    if (CurrentClient.Status == Model.Data.ClientStatus.CrucialClient)
+                    {
+                        return _allClientStatuses[1];
+                    }
+                    else return _allClientStatuses[0];
+
+            }
+            set
+            {
+                CurrentClient.Status = (ClientStatus)value.Number;
+            }
+        }
+
+        // свойства списка покупок
+
+        private List<Transaction> _currentClientProducts;
+        public List<Transaction> CurrentClientProducts
+        {
+            get
+            {
+                return AllTransactions.
+                    Where(el => el.ClientId == CurrentClient.Id).
+                    ToList();
+            }
+            set
+            {
+                _currentClientProducts = value;
+            }
+        }
+
+        private Transaction _currentTransaction;
+        public Transaction CurrentTransaction
+        {
+            get; set;
+        }
+
+        public class DurationClass
+        {
+            public DurationClass(string name, int num)
+            {
+                Name = name;
+                Number = num;
+            }
+            public string Name { get; set; }
+            public int Number { get; set; }
+        }
+
+        private List<DurationClass> _allProductsDurations = new List<DurationClass>()
+        {
+            new DurationClass("Месяц",0),
+            new DurationClass("Квартал",1),
+            new DurationClass("Год",2)
+    
+        };
+        public List<DurationClass> AllProductsDurations
+        {
+            get
+            {
+                return _allProductsDurations;
+            }
+            set
+            {
+                _allProductsDurations = value;
+            }
+        }
+        public DurationClass CurrentDuration { get; set; }
 
         #endregion
 
@@ -167,6 +270,7 @@ namespace SoftTradePlus.ViewModel
                 );
             }
         }
+
         private RelayCommand _addNewProduct;
         public RelayCommand AddNewProduct
         {
@@ -193,6 +297,7 @@ namespace SoftTradePlus.ViewModel
             {
                 return _openAddNewClientWindow ?? new RelayCommand(obj =>
                 {
+                    CurrentClient = new Client();
                     OpenAddNewClientWindowMethod();
                 }
                 );
@@ -217,6 +322,212 @@ namespace SoftTradePlus.ViewModel
                 );
             }
         }
+
+        private RelayCommand _deleteProduct;
+        public RelayCommand DeleteProduct
+        {
+            get
+            {
+                return _deleteProduct ?? new RelayCommand(obj =>
+                {
+                    SQLHelper.DeleteProduct(CurrentProduct);
+                    foreach(var tr in SQLHelper.GetAllTransactions())
+                    {
+                        if (tr.ProductId == CurrentProduct.Id) SQLHelper.DeleteTransaction(tr);
+                    }
+                    CurrentProduct = null;
+                    UpdateAllTransactionsView();
+                    UpdateAllProductsView();
+                });
+            }
+        }
+        
+        private RelayCommand _deleteClient;
+        public RelayCommand DeleteClient
+        {
+            get
+            {
+                return _deleteClient ?? new RelayCommand(obj =>
+                {
+                    SQLHelper.DeleteClient(CurrentClient);
+                    CurrentClient = null;
+                    UpdateAllClientsView();
+                }
+                );
+            }
+        }
+
+        private RelayCommand _openEditProductWindow;
+        public RelayCommand OpenEditProductWindow
+        {
+            get
+            {
+                return _openEditProductWindow ?? new RelayCommand(obj =>
+                {
+                    if(CurrentProduct != null)
+                    OpenEditProductWindowMethod();
+                });
+            }
+        }
+
+        private RelayCommand _editProduct;
+        public RelayCommand EditProduct
+        {
+            get
+            {
+                return _editProduct ?? new RelayCommand(obj =>
+                {
+                    Window wnd = obj as Window;
+                    if (SelectedProductName != null && 
+                    SelectedProductName.Replace(" ", "").Length != 0 && 
+                    SelectedProductPrice > 0 && 
+                    SelectedProductType != null)
+                    {
+                        SQLHelper.EditProduct(CurrentProduct, SelectedProductName, SelectedProductPrice, (Model.Data.ProductType)SelectedProductType.Number);
+                        wnd.Close();
+                        UpdateAllProductsView();
+                    }
+                });
+            }
+        }
+
+        private RelayCommand _openCurrentClientProductsWindow;
+        public RelayCommand OpenCurrentClientProductsWindow
+        {
+            get
+            {
+                return _openCurrentClientProductsWindow ?? new RelayCommand(obj =>
+                {
+                    if(CurrentClient != null)
+                    OpenCurrentClientProductsWindowMethod();
+                });
+            }
+        }
+
+        private RelayCommand _openAddProductToCurrentClient;
+        public RelayCommand OpenAddProductToCurrentClient
+        {
+            get
+            {
+                return _openAddProductToCurrentClient ?? new RelayCommand(obj =>
+                {
+                    OpenAddProductToCurrentClientWindowMethod();
+                });
+            }
+        }
+
+        private RelayCommand _addProductTimeWindow;
+        public RelayCommand AddProductTimeWindow
+        {
+            get
+            {
+                return _addProductTimeWindow ?? new RelayCommand(obj =>
+                {
+                    Window wnd = obj as Window;
+                if (AllTransactions.Where(el => el.ProductId == CurrentProduct.Id && el.ClientId == CurrentClient.Id).Count() == 0 && SelectedProductType != null)
+                    {
+                        if (CurrentProduct.Type == Model.Data.ProductType.Limited)
+                        {
+                            wnd.Close();
+                            OpenAddProductTimeWindowMethod();
+                        }
+                        else
+                        {
+                            wnd.Close();
+                            SQLHelper.CreateTransaction(CurrentClient, CurrentProduct, Duration.Year);
+                        }
+                        UpdateAllTransactionsView();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Такой товар уже есть у этого клиента","Ошибка добавления", MessageBoxButton.OK ,MessageBoxImage.Warning);
+                    }
+                });
+            }
+        }
+
+        private RelayCommand _addProductToClient;
+        public RelayCommand AddProductToClient
+        {
+            get
+            {
+                return _addProductToClient ?? new RelayCommand(obj =>
+                {
+                    Window wnd = obj as Window;
+                    if (CurrentDuration != null)
+                    {
+                        wnd.Close();
+                        SQLHelper.CreateTransaction(CurrentClient, CurrentProduct,(Duration)CurrentDuration.Number);
+                        UpdateAllTransactionsView();
+                    }
+                });
+            }
+        }
+
+        private RelayCommand _deleteProductFromCurrentClient;
+        public RelayCommand DeleteProductFromCurrentClient
+        {
+            get
+            {
+                return _deleteProductFromCurrentClient ?? new RelayCommand(obj =>
+                {
+                    //SQLHelper.DeleteTransaction(AllTransactions.Where(el=> el.ClientId == CurrentClient.Id && el.ProductId == CurrentProduct.Id).Single());
+                    SQLHelper.DeleteTransaction(CurrentTransaction);
+                    UpdateAllTransactionsView();
+                });
+            }
+        }
+
+        private RelayCommand _openEditCurrentClientWindow;
+        public RelayCommand OpenEditCurrentClientWindow
+        {
+            get
+            {
+                return _openEditCurrentClientWindow ?? new RelayCommand(obj =>
+                {
+                    if(CurrentClient != null)
+                    {
+                        OpenEditCurrentClientWindowMethod();
+                    }
+                });
+            }
+        }
+        private RelayCommand _editClient;
+        public RelayCommand EditClient
+        {
+            get
+            {
+                return _editClient ?? new RelayCommand(obj =>
+                {
+                    Window wnd = obj as Window;
+                    if (ClientName != null &&
+                    ClientName.Replace(" ", "").Length != 0 &&
+                    ClientStatus != null)
+                    {
+                        SQLHelper.EditClient(CurrentClient, ClientName, CurrentManager.Id, (Model.Data.ClientStatus)ClientStatus.Number);
+                        wnd.Close();
+                        UpdateAllClientsView();
+                    }
+                });
+            }
+        }
+
+        private RelayCommand _changeUser;
+        public RelayCommand ChangeUser
+        {
+            get
+            {
+                return _changeUser ?? new RelayCommand(obj =>
+                {
+                    Window wnd = obj as Window;
+                    RegistrationWindow regWindow = new RegistrationWindow();
+                    regWindow.Show();
+                    wnd.Close();
+                    
+                });
+            }
+        }
+
         #endregion
 
         #region Update View
@@ -236,6 +547,14 @@ namespace SoftTradePlus.ViewModel
             MainWindow.AllClients.ItemsSource = AllClients;
             MainWindow.AllClients.Items.Refresh();
         }
+        private void UpdateAllTransactionsView()
+        {
+            AllTransactions = SQLHelper.GetAllTransactions();
+            CurrentClientsProducts.AllTransactions.ItemsSource = null;
+            CurrentClientsProducts.AllTransactions.Items.Clear();
+            CurrentClientsProducts.AllTransactions.ItemsSource = CurrentClientProducts;
+            CurrentClientsProducts.AllTransactions.Items.Refresh();
+        }
         #endregion
 
         #region Open Windows
@@ -251,7 +570,28 @@ namespace SoftTradePlus.ViewModel
         }
         private void OpenEditProductWindowMethod()
         {
-            //EditProductWindow editProductWindow = new EditProductWindow(selectedProduct,);
+            EditProductWindow editProductWindow = new EditProductWindow(this);
+            SetCenterPositionAndOpen(editProductWindow);
+        }
+        private void OpenCurrentClientProductsWindowMethod()
+        {
+            CurrentClientsProducts currentClientsProductsWindow = new CurrentClientsProducts(this);
+            SetCenterPositionAndOpen(currentClientsProductsWindow);
+        }
+        private void OpenAddProductToCurrentClientWindowMethod()
+        {
+            AddProductToCurrentClient addProductToCurrentClientWnd = new AddProductToCurrentClient(this);
+            SetCenterPositionAndOpen(addProductToCurrentClientWnd);
+        }
+        private void OpenAddProductTimeWindowMethod()
+        {
+            AddProductTimeWindow addProductTimeWindow = new AddProductTimeWindow(this);
+            SetCenterPositionAndOpen(addProductTimeWindow);
+        }
+        private void OpenEditCurrentClientWindowMethod()
+        {
+            EditClientWindow editClientWindow = new EditClientWindow(this);
+            SetCenterPositionAndOpen(editClientWindow);
         }
         private void SetCenterPositionAndOpen(Window wnd)
         {

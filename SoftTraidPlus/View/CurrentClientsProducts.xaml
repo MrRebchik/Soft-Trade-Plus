@@ -1,0 +1,58 @@
+﻿<Window x:Class="SoftTradePlus.View.CurrentClientsProducts"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SoftTradePlus.View"
+        mc:Ignorable="d"
+        Title="CurrentClientsProducts" Height="457" Width="789">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <ListView Grid.Row="1"
+                  x:Name="ViewAllTransactions"
+                  ItemsSource="{Binding CurrentClientProducts }"
+                  SelectedItem = "{Binding CurrentTransaction}"
+                  FontSize="16"
+                  Padding="10 0 10 0">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="IsSelected" Value="{Binding CurrentTransaction}"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View >
+                <GridView>
+                    <GridViewColumn Header="Название продукта" 
+                                    DisplayMemberBinding="{Binding Path=Name}"/>
+                    <GridViewColumn Header="Дата истечения срока действия" 
+                                    DisplayMemberBinding="{Binding Path=ExpiryDate}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <TextBlock Grid.Row="0"
+                   FontSize="24"
+                   Text="Список продуктов клиента"
+                   Margin="20 10 0 0"/>
+        <Button Grid.Row="2"
+                Content="Добавить"
+                Width="200"
+                Height="50"
+                HorizontalAlignment="Right"
+                Margin="0 0 5 0"
+                FontSize="20"
+                Command="{Binding OpenAddProductToCurrentClient}"
+                />
+        <Button Grid.Row="2"
+                Content="Удалить"
+                Width="200"
+                Height="50"
+                HorizontalAlignment="Left"
+                Margin="5 0 0 0"
+                FontSize="20"
+                Command="{Binding DeleteProductFromCurrentClient}"
+                />
+    </Grid>
+</Window>

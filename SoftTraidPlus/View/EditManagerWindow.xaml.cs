@@ -6,11 +6,11 @@ namespace SoftTradePlus.View
 {
     public partial class EditManagerWindow : Window
     {
-        public EditManagerWindow(Manager selectedManager, string selectedName)
+        public EditManagerWindow(Manager selectedManager)
         {
             InitializeComponent();
             DataContext = new RegistrationWindowViewModel();
-            RegistrationWindowViewModel.SelectedManagerName = selectedName;
+            RegistrationWindowViewModel.SelectedManagerName = selectedManager.Name;
             RegistrationWindowViewModel.SelectedManager = selectedManager;
         }
     }

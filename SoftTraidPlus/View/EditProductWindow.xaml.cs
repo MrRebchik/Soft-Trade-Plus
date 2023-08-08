@@ -1,13 +1,14 @@
-﻿using SoftTradePlus.Model.Data;
+﻿using SoftTradePlus.ViewModel;
 using System.Windows;
 
 namespace SoftTradePlus.View
 {
     public partial class EditProductWindow : Window
     {
-        public EditProductWindow(Product selectedProduct)
+        public EditProductWindow(IMainWindowViewModel vm)
         {
             InitializeComponent();
+            DataContext = vm;
         }
     }
 }

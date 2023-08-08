@@ -11,6 +11,11 @@ namespace SoftTradePlus.ViewModel
 {
     public class RegistrationWindowViewModel : IRegistrationWindowViewModel, INotifyPropertyChanged
     {
+        public RegistrationWindowViewModel()
+        {
+            _wrapper = new SettingsWrapper();
+            _wrapper.Initialize();
+        }
         private List<Manager> _allManagers = SQLHelper.GetAllManagers();
         public List<Manager> AllManagers 
         { 
@@ -38,6 +43,8 @@ namespace SoftTradePlus.ViewModel
             }
         }
 
+        private SettingsWrapper _wrapper;
+
         private bool _storeSelection;
         public bool StoreSelection 
         {
@@ -48,6 +55,7 @@ namespace SoftTradePlus.ViewModel
             set
             {
                 _storeSelection = value;
+                _wrapper.IsAuthorized = value;
                 NotifyPropertyChanged(nameof(StoreSelection));
             }
         }
@@ -122,7 +130,7 @@ namespace SoftTradePlus.ViewModel
                 {
                     if (SelectedManager != null)
                     {
-                        OpenEditManagerWindowMethod(SelectedManager, SelectedManager.Name);
+                        OpenEditManagerWindowMethod(SelectedManager);
                     }
                 }
                 );
@@ -164,6 +172,9 @@ namespace SoftTradePlus.ViewModel
                     if (SelectedManager != null)
                     {
                         MainWindow mainWindow = new MainWindow(new MainWindowViewModel(_selectedManager));
+                        _wrapper.IsAuthorized = _storeSelection;
+                        _wrapper.CurrentUser = _selectedManager;
+                        _wrapper.Save();
                         mainWindow.Show();
                         wnd.Close();
                     }
@@ -186,9 +197,9 @@ namespace SoftTradePlus.ViewModel
         #endregion
 
         #region OpenWindows
-        private void OpenEditManagerWindowMethod(Manager selectedManager, string name)
+        private void OpenEditManagerWindowMethod(Manager selectedManager)
         {
-            EditManagerWindow editManagerWindow = new EditManagerWindow(selectedManager, name);
+            EditManagerWindow editManagerWindow = new EditManagerWindow(selectedManager);
             SetCenterPositionAndOpen(editManagerWindow);
         }
 

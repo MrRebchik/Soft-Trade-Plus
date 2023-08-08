@@ -20,11 +20,11 @@ namespace SoftTradePlus.Model.Data
             {
                 if (this.Type == ProductType.Limited)
                 {
-                    return "Продливаемый";
+                    return "Временная подписка";
                 }
                 else
                 {
-                    return "Бессрочный";
+                    return "Лицензия";
                 }
             }
         }

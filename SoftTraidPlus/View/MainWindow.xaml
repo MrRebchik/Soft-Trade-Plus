@@ -12,16 +12,15 @@
             <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Button Grid.Column="1"
+
+        <Button Grid.Column="0"
                 Height="35"
                 Width="120"
                 HorizontalAlignment="Right"
                 Margin="0 0 2 0"
                 Panel.ZIndex="2"
+                Command="{Binding ChangeUser}"
+                CommandParameter="{Binding ElementName=WorkWnd}"
                 >
             <TextBlock TextAlignment ="Center">
                 Сменить <LineBreak/>
@@ -35,7 +34,7 @@
                    Text="{Binding ManagerName}"
                    Margin="0 0 130 0"/>
         <TabControl Grid.ColumnSpan="2" Grid.RowSpan="2" 
-                    Margin="0 15 0 0">
+                    Margin="0 20 0 0">
             <TabItem>
                 <TabItem.Header>
                     <TextBlock> Клиенты</TextBlock>
@@ -48,7 +47,7 @@
                     <ListView 
                     x:Name="ViewAllClients"
                     ItemsSource="{Binding AllClients }"
-                    SelectedItem = "{Binding SelectedClient}"
+                    SelectedItem = "{Binding CurrentClient}"
                     FontSize="16"
                     Padding="10 0 10 0">
                         <ListView.ItemContainerStyle>
@@ -70,19 +69,22 @@
                             Height="35"
                             HorizontalAlignment="Left"
                             Margin="5 0 0 0"
-                            Content="Открыть продукты клиента"/>
+                            Content="Открыть продукты клиента"
+                            Command="{Binding OpenCurrentClientProductsWindow}"/>
                     <Button Grid.Row="1"
                             Width="150"
                             Height="35"
                             HorizontalAlignment="Left"
                             Margin="210 0 0 0"
-                            Content="Редактировать"/>
+                            Content="Редактировать"
+                            Command="{Binding OpenEditCurrentClientWindow}"/>
                     <Button Grid.Row="1"
                             Width="150"
                             Height="35"
                             HorizontalAlignment="Left"
                             Margin="365 0 0 0"
-                            Content="Удалить"/>
+                            Content="Удалить"
+                            Command="{Binding DeleteClient}"/>
                     <Button Grid.Column="0" Grid.Row="1"
                             Width="150"
                             Height="35"
@@ -104,12 +106,12 @@
                     <ListView 
                         x:Name="ViewAllProducts"
                         ItemsSource="{Binding AllProducts }"
-                        SelectedItem = "{Binding SelectedProduct}"
+                        SelectedItem = "{Binding CurrentProduct}"
                         FontSize="16"
                         Padding="10 0 10 0">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
-                                <Setter Property="IsSelected" Value="{Binding SelectedProduct}"/>
+                                <Setter Property="IsSelected" Value="{Binding CurrentProduct}"/>
                             </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.View >
@@ -128,13 +130,15 @@
                             Height="35"
                             HorizontalAlignment="Left"
                             Margin="5 0 0 0"
-                            Content="Редактировать"/>
+                            Content="Редактировать"
+                            Command="{Binding OpenEditProductWindow}"/>
                     <Button Grid.Row="1"
                             Width="150"
                             Height="35"
                             HorizontalAlignment="Left"
                             Margin="160 0 0 0"
-                            Content="Удалить"/>
+                            Content="Удалить"
+                            Command="{Binding DeleteProduct}"/>
                     <Button Grid.Column="0" Grid.Row="1"
                             Width="150"
                             Height="35"
